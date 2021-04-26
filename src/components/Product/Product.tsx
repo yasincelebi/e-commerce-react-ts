@@ -12,15 +12,17 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import ProductTypes from "../productTypes";
-
+import { Typography } from "@material-ui/core";
 type propsTypes = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   product: any[];
+  onAddToCart: (productId: number, quantity: number) => void;
 };
 
-const Product: React.FC<propsTypes> = ({ product }): ReactElement => {
-  
-  console.log(product);
+const Product: React.FC<propsTypes> = ({
+  product,
+  onAddToCart,
+}): ReactElement => {
   return (
     <>
       <div>
@@ -35,14 +37,21 @@ const Product: React.FC<propsTypes> = ({ product }): ReactElement => {
           <CardBody className={styles.cardbody}>
             <div className={styles.productrow}>
               <CardTitle tag="h5">{product["name"]}</CardTitle>
-              <CardText>{product["price"].formatted}</CardText>
+              <CardText tag="h6">
+                {product["price"].formatted_with_symbol}
+              </CardText>
             </div>
 
             <CardSubtitle tag="h6" className="mb-2 text-muted">
               Card subtitle
             </CardSubtitle>
-            <CardText>{product["description"]}</CardText>
-            <div className={styles.buttoncontainer}>
+            <Typography
+              dangerouslySetInnerHTML={{ __html: product["description"] }}
+            />
+            <div
+              className={styles.buttoncontainer}
+              onClick={() => onAddToCart(product["id"], 1)}
+            >
               <Button className={styles.cartbutton} color="info">
                 <FontAwesomeIcon icon={faShoppingCart} /> Add To Cart
               </Button>
